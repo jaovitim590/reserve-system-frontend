@@ -41,3 +41,35 @@ export async function getQuartos(): Promise<QuartoProps[]> {
 
   return quartos;
 }
+
+export async function getQuartoById(id: number): Promise<QuartoProps> {
+  const token = localStorage.getItem(TOKEN_KEY)
+  const res = await api.get<QuartoResponse>(`/api/quarto/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return {
+    id: res.data.id,
+    nome: res.data.name,
+    descricao: res.data.descricao,
+    tipo: res.data.tipo,
+    status: res.data.status,
+    image: getRandomRoomImage(),
+  }
+}
+
+export async function getDisponibilidade(
+  id: number,
+  inicio: string,
+  fim: string
+) {
+  const res = await api.get(`/api/reserva/${id}`, {
+    params: {
+      inicio: inicio,
+      fim: fim
+    }
+  });
+
+  return res.data;
+}

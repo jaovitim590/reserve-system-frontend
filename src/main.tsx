@@ -7,7 +7,7 @@ import { router } from "./routes";
 import { Toaster } from "sonner";
 import { getTheme } from "./theme/theme";
 import { ThemeContext } from "./theme/ThemeContext";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthProvider";
 
 function Root() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -27,10 +27,10 @@ return (
   <ThemeContext.Provider value={{ toggleTheme }}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthContextProvider>
+      <AuthProvider>
         <RouterProvider router={router} />
         <Toaster />
-      </AuthContextProvider>
+      </AuthProvider>
     </ThemeProvider>
   </ThemeContext.Provider>
 );

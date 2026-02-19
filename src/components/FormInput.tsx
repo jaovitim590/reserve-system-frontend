@@ -1,25 +1,29 @@
 import {
   TextField,
   type TextFieldProps
-} from "@mui/material"
-import { Controller, type Control } from "react-hook-form";
+} from "@mui/material";
+import {
+  Controller,
+  type Control,
+  type FieldValues,
+  type Path
+} from "react-hook-form";
 
-type FormInputProps = TextFieldProps & {
-  name: string;
-  control: Control<any>;
-};
+type FormInputProps<T extends FieldValues> = {
+  name: Path<T>;
+  control: Control<T>;
+} & TextFieldProps;
 
-export const FormInput = ({
+export function FormInput<T extends FieldValues>({
   name,
   control,
   ...props
-}: FormInputProps) => {
+}: FormInputProps<T>) {
   return (
     <Controller
-    name={name}
-    control={control}
-    render={({ field, fieldState }) => {
-      return (
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
         <TextField
           {...field}
           {...props}
@@ -28,12 +32,7 @@ export const FormInput = ({
           error={!!fieldState.error}
           helperText={fieldState.error?.message}
         />
-      );
-    }}
-    >
-
-    </Controller>
-  )
+      )}
+    />
+  );
 }
-
-

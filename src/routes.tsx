@@ -4,34 +4,27 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Perfil } from "./pages/Perfil";
 import { Layout } from "./components/Layout";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { QuartoReserva } from "./pages/Reservar";
 import { createBrowserRouter } from "react-router-dom";
-
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
     children: [
+      {index: true,Component: Home,},
+      {path: "quartos",Component: Quartos},
+      {path: "register",Component: Register,},
+      {path: "login",Component: Login,},
       {
-        index: true,
-        Component: Home
-      },
-      {
-        path: "quartos",
-        Component: Quartos 
-      },
-      {
-        path: "login",
-        Component: Login
-      },
-      {
-        path: "register",
-        Component: Register
-      },
-      {
-        path: "perfil",
-        Component: Perfil
+        Component: ProtectedRoute,
+        children: [
+          { path: "perfil", Component: Perfil },
+          { path: "quartos/:id/reservar", Component: QuartoReserva },
+         //{ path: "reservas", Component: Reservas },
+        ]
       }
     ]
   }
-])
+]);

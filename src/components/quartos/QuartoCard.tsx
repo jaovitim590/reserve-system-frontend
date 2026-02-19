@@ -9,6 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import { type QuartoProps } from "../../services/quartoService";
+import { useNavigate } from "react-router-dom";
 
 export const QuartoCard = (props: QuartoProps) => {
   const getStatusColor = (status: string) => {
@@ -21,6 +22,15 @@ export const QuartoCard = (props: QuartoProps) => {
         return "default";
     }
   };
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    if (props.status === "DISPONIVEL") {
+      navigate(`/quartos/${props.id}/reservar`)
+    } else {
+      navigate(`/quartos/${props.id}/reservar`)
+    }
+  }
 
   return (
     <Card
@@ -68,6 +78,7 @@ export const QuartoCard = (props: QuartoProps) => {
           variant="contained"
           fullWidth
           color={props.status !== "Disponível" ? "secondary" : "primary"}
+          onClick={handleClick}
         >
           {props.status === "Disponível" ? "Reservar" : "Verificar disponibilidade"}
         </Button>
