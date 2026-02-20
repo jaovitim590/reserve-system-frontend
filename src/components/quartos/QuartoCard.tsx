@@ -77,10 +77,10 @@ export const QuartoCard = (props: QuartoProps) => {
           size="small"
           variant="contained"
           fullWidth
-          color={props.status !== "Disponível" ? "secondary" : "primary"}
+          color={props.status !== "DISPONIVEL" ? "secondary" : "primary"}
           onClick={handleClick}
         >
-          {props.status === "Disponível" ? "Reservar" : "Verificar disponibilidade"}
+          {props.status === "DISPONIVEL" ? "Reservar" : "Verificar disponibilidade"}
         </Button>
       </CardActions>
     </Card>

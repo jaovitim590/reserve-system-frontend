@@ -11,7 +11,7 @@ export type Quarto = {
   status: string;
   descricao: string;
   capacidade: number;
-  name: string;
+  nome: string;
   valor: number;
   tipo: string;
   data_criacao: string; // ISO date
@@ -19,15 +19,15 @@ export type Quarto = {
 
 export type Reserva = {
   id: number;
-  quarto: Quarto;
-  data_inicio: string; // yyyy-MM-dd
-  data_fim: string;    // yyyy-MM-dd
+  quartoId: Quarto;
+  dataInicio: string; // yyyy-MM-dd
+  dataFim: string;    // yyyy-MM-dd
   status: string | null;
   valorTotal: number;
 };
 
 export async function createReservaa(params: ReservaRequest) {
-  const token = localStorage.getItem(TOKEN_KEY)
+  const token = localStorage.getItem(TOKEN_KEY);
   const res = await api.post("/api/reserva", {
     quartoId: params.quarto_id,
     dataInicio: params.dataInicio,
@@ -38,5 +38,23 @@ export async function createReservaa(params: ReservaRequest) {
     }
   })
   return res.data;
+}
 
+export async function GetMyReservas() {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const res = await api.get<Reserva[]>("/api/reserva/minhas", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return res.data;
+}
+export async function cancelarReserva(id: number) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const res = await api.put(`/api/reserva/${id}/cancelar`, null, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return res.data;
 }

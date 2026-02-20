@@ -6,6 +6,8 @@ import { Perfil } from "./pages/Perfil";
 import { Layout } from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { QuartoReserva } from "./pages/Reservar";
+import { MinhasReservas } from "./pages/MyReservas";
+import { Contato } from "./pages/Contato";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -17,12 +19,13 @@ export const router = createBrowserRouter([
       {path: "quartos",Component: Quartos},
       {path: "register",Component: Register,},
       {path: "login",Component: Login,},
+      {path: "contato", Component: Contato},
       {
         Component: ProtectedRoute,
         children: [
           { path: "perfil", Component: Perfil },
           { path: "quartos/:id/reservar", Component: QuartoReserva },
-         //{ path: "reservas", Component: Reservas },
+          {path: "reservas", Component:MinhasReservas}
         ]
       }
     ]

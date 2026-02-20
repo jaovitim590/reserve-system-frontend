@@ -38,7 +38,7 @@ export const Register = () => {
         const { passwordConfirmation, ...payload } = data
         await authService.signUp(payload)
         navigate("/login")
-      } catch {
+      } catch(e: any) {
         setError("root", { message: "Erro ao criar conta. Tente novamente." })
       }
     }

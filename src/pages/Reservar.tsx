@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormInput } from "../components/FormInput";
-import { getQuartoById, getDisponibilidade, type QuartoProps } from "../services/quartoService";
+import { getQuartoById, checkQuartoDisponibilidade, type QuartoProps } from "../services/quartoService";
 import { createReservaa } from "../services/reservaService";
 
 const reservaSchema = z.object({
@@ -87,7 +87,7 @@ export const QuartoReserva = () => {
     setCheckingDisp(true);
     setDispError(null);
     try {
-      const res = await getDisponibilidade(Number(id), dataInicio, dataFim);
+      const res = await checkQuartoDisponibilidade(Number(id), dataInicio, dataFim);
       setDisponibilidade(res);
     } catch {
       setDispError("Erro ao verificar disponibilidade. Tente novamente.");
@@ -150,7 +150,7 @@ export const QuartoReserva = () => {
   const ocupado = quarto.status === "OCUPADO";
   const dias = calcularDias();
   const datasPreenchidas = !!dataInicio && !!dataFim && new Date(dataFim) > new Date(dataInicio);
-  const podeReservar = !ocupado || disponibilidade === true;
+  const podeReservar = disponibilidade === true || (!ocupado && datasPreenchidas);
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 4 }}>
@@ -215,19 +215,28 @@ export const QuartoReserva = () => {
                 control={control}
                 label="Data de saída"
                 InputLabelProps={{ shrink: true }}
-                inputProps={{ min: dataInicio || new Date().toISOString().split("T")[0] }}
+                inputProps={{ 
+                  min: dataInicio 
+                    ? new Date(new Date(dataInicio).getTime() + 86400000).toISOString().split("T")[0]
+                    : new Date().toISOString().split("T")[0] 
+                }}
               />
 
-              {dias > 0 && (
-                <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, mt: 1, bgcolor: "action.hover" }}>
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="body2" color="text.secondary">Duração</Typography>
-                    <Typography variant="body2" fontWeight={600}>{dias} {dias === 1 ? "dia" : "dias"}</Typography>
-                  </Box>
-                </Paper>
-              )}
+            {dias > 0 && quarto.valor && (
+              <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, mt: 1, bgcolor: "action.hover" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="body2" color="text.secondary">Duração</Typography>
+                  <Typography variant="body2" fontWeight={600}>{dias} {dias === 1 ? "dia" : "dias"}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
+                  <Typography variant="body2" color="text.secondary">Total estimado</Typography>
+                  <Typography variant="body2" fontWeight={700} color="primary">
+                    R$ {(dias * quarto.valor).toFixed(2)}
+                  </Typography>
+                </Box>
+              </Paper>
+            )}
 
-              {/* Botão de verificar — só aparece se OCUPADO */}
               {ocupado && (
                 <>
                   <Button
@@ -275,7 +284,7 @@ export const QuartoReserva = () => {
                     variant="contained"
                     size="large"
                     fullWidth
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !datasPreenchidas}
                     sx={{
                       mt: 1,
                       py: 1.5,

@@ -20,7 +20,15 @@ export type QuartoProps = {
   tipo: string;
   status: string;
   image: string;
+  valor: number;
 };
+
+type DisponibilidadeResponse = {
+  quartoId: number;
+  dataInicio: string;
+  dataFim: string;
+  disponivel: boolean;
+}
 
 export async function getQuartos(): Promise<QuartoProps[]> {
   const token = localStorage.getItem(TOKEN_KEY)
@@ -37,6 +45,7 @@ export async function getQuartos(): Promise<QuartoProps[]> {
     tipo: quarto.tipo,
     status: quarto.status,
     image: getRandomRoomImage(),
+    valor: quarto.valor
   }));
 
   return quartos;
@@ -56,6 +65,7 @@ export async function getQuartoById(id: number): Promise<QuartoProps> {
     tipo: res.data.tipo,
     status: res.data.status,
     image: getRandomRoomImage(),
+    valor: res.data.valor
   }
 }
 
@@ -72,4 +82,15 @@ export async function getDisponibilidade(
   });
 
   return res.data;
+}
+
+export async function checkQuartoDisponibilidade(id: number, inicio: string, fim: string): Promise<boolean> {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const res = await api.get<DisponibilidadeResponse>(`/api/quarto/${id}/disponibilidade`, {
+    params: { inicio, fim },
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return res.data.disponivel;
 }
