@@ -9,6 +9,7 @@ import { QuartoReserva } from "./pages/Reservar";
 import { MinhasReservas } from "./pages/MyReservas";
 import { Contato } from "./pages/Contato";
 import { createBrowserRouter } from "react-router-dom";
+import { DashBoard } from "./components/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,8 @@ export const router = createBrowserRouter([
         children: [
           { path: "perfil", Component: Perfil },
           { path: "quartos/:id/reservar", Component: QuartoReserva },
-          {path: "reservas", Component:MinhasReservas}
+          {path: "reservas", Component:MinhasReservas},
+          {path: "dashboard", Component:DashBoard}
         ]
       }
     ]

@@ -19,9 +19,9 @@ type TokenResponse = {
 
 
 export type User = {
-  id: string;
   name: string;
   email: string;
+  role: string;
 }
 
 async function signIn({email, password}: SignInPayload): Promise<TokenResponse> {

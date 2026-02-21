@@ -13,7 +13,8 @@ import {
   Login,
   BookmarkBorder,
   Person,
-  DarkMode
+  DarkMode,
+  AdminPanelSettings
 } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
@@ -47,7 +48,8 @@ export const UserMenu = ({ onMenuItemClick }: UserMenuProps) => {
     handleClose();
   };
 
-const {token, logout} = useContext(AuthContext);
+const {token, logout, user} = useContext(AuthContext);
+const isAdmin = user?.role === "ADMIN";
 
 const handleLogout = () => {
   logout()
@@ -59,6 +61,12 @@ const menuItems = token
   ? [
       { action: "reservas" as MenuAction, label: "Minhas Reservas", icon: <BookmarkBorder />, path: "/reservas", onClick: () => handleMenuItemClick("reservas", "/reservas") },
       { action: "perfil" as MenuAction, label: "Meu Perfil", icon: <Person />, path: "/perfil", onClick: () => handleMenuItemClick("perfil", "/perfil") },
+      ...(isAdmin ? [{
+        action: "admin" as MenuAction,
+        label: "Painel Admin",
+        icon: <AdminPanelSettings />,
+        onClick: () => handleMenuItemClick("admin" as MenuAction, "/dashboard"),
+      }] : []),
       { action: "tema" as MenuAction, label: "Alternar Tema", icon: <DarkMode />, onClick: () => { toggleTheme(); handleClose(); } },
       { action: "sair" as MenuAction, label: "Sair", icon: <LogoutIcon />, onClick: handleLogout, color: "error.main" },
     ]
