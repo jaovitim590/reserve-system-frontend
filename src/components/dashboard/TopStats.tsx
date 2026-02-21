@@ -69,7 +69,13 @@ if (loading) {
       </Box>
     );
   }
-
+if (error) {
+  return (
+    <Box sx={{ textAlign: "center", mt: 4 }}>
+      {error}
+    </Box>
+  );
+}
   return <Grid container spacing={2.5} sx={{ mb: 3 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard

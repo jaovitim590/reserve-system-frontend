@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import type { AxiosError } from "axios";
 
 export const Register = () => {
   const {
@@ -36,7 +37,6 @@ export const Register = () => {
 
   const navigate = useNavigate();
 
-  // Observa os dois campos em tempo real
   const password = useWatch({ control, name: "password" });
   const passwordConfirmation = useWatch({ control, name: "passwordConfirmation" });
 
@@ -47,13 +47,23 @@ export const Register = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      const { passwordConfirmation, ...payload } = data;
+      const payload = {
+  name: data.name,
+  email: data.email,
+  password: data.password,
+};
       await authService.signUp(payload);
       navigate("/login");
-    } catch (e: any) {
-      setError("root", { message: "Erro ao criar conta. Tente novamente." });
-    }
-  };
+    } catch (error: unknown) {
+  const err = error as AxiosError;
+
+  if (err.response?.status === 409) {
+    setError("root", { message: "E-mail já cadastrado." });
+  } else {
+    setError("root", { message: "Erro ao criar conta. Tente novamente." });
+  }
+}
+  }
 
   return (
     <Box

@@ -31,7 +31,7 @@ async function signIn({email, password}: SignInPayload): Promise<TokenResponse> 
     });
     return res.data;
   } catch (error) {
-    throw new Error("Falha ao fazer login. Verifique suas credenciais.");
+    throw new Error("Falha ao fazer login. Verifique suas credenciais."+ error);
   }
 }
 
@@ -45,7 +45,7 @@ async function signUp({name, email, password}: SignUpPayload) {
     });
     return res.data;
   }catch (error){
-    throw new Error("falha ao fazer registro")
+    throw new Error("falha ao fazer registro"+ error)
   }
 }
 

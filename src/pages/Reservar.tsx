@@ -104,14 +104,28 @@ export const QuartoReserva = () => {
         dataFim: data.dataFim,
       });
       setSuccess(true);
-    } catch (error: any) {
-      if (error?.response?.status === 409) {
-        setError("root", { message: "Já existe uma reserva para este período. Escolha outras datas." })
-      } else {
-        setError("root", { message: "Erro ao criar reserva. Tente novamente." })
-      }
+    } catch (error: unknown) {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error
+  ) {
+    const err = error as {
+      response?: { status?: number };
+    };
+
+    if (err.response?.status === 409) {
+      setError("root", {
+        message: "Já existe uma reserva para este período. Escolha outras datas.",
+      });
+      return;
     }
-  };
+  }
+  setError("root", {
+    message: "Erro ao criar reserva. Tente novamente.",
+  });
+};
+  }
 
   if (loading) {
     return (

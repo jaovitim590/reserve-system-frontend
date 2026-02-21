@@ -64,6 +64,13 @@ export const ReservasRecentes = () => {
       </Box>
     );
   }
+  if (error) {
+  return (
+    <Box sx={{ textAlign: "center", mt: 4 }}>
+      {error}
+    </Box>
+  );
+}
 return <Grid size={{ xs: 12, lg: 6 }}>
           <Card sx={{ borderRadius: 3, height: "100%" }}>
             <CardContent>

@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Grid,
   Typography,
+  Alert
 } from "@mui/material";
 
 const defaultStats: StatsRes = {
@@ -77,7 +78,13 @@ if (loading) {
       </Box>
     );
   }
-
+if (error) {
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Alert severity="error">{error}</Alert>
+    </Box>
+  );
+}
   return <Grid size={{ xs: 12, md: 7 }}>
           <Card sx={{ borderRadius: 3 }}>
             <CardContent>
