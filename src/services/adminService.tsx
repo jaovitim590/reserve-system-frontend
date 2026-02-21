@@ -1,76 +1,118 @@
 import { adminApi } from "./api";
 import { TOKEN_KEY } from "../lib/token";
 
-type quartoRes ={
-  id: number,
-  status: string,
-  descricao: string,
-  capacidade: number,
-  name: string,
-  valor: number,
-  tipo: string,
-  data_criacao: string
-}
-type bestRes ={
-  total: number,
-  quarto: quartoRes
-}
-type authorities = {
-  authority: string
-}
-type usuarioRes = {
-  id: number,
-  email: string,
-  password: string,
-  name: string,
-  role: string,
-  data_criado: string,
-  ativo: boolean,
-  authorities: authorities
-}
-type reservaRes = {
-  id: number,
-  status: string,
-  quarto: quartoRes,
-  usuario: usuarioRes,
-  data_incio: string,
-  data_fim: string,
-  valorTotal: number,
-  data_criado: string
-}
-type receitaRes = {
-  ativa: number,
-  canceladas: number
-}
-type receitaPeriodoRes = {
-  dataInicio: string,
-  dataFim: string,
-  receitaAtivas: number,
-  receitaCanceladas: number,
-  receitaTotal: number
-}
-type quartoStatsRes = {
-  disponiveis: number,
-  ocupados: number
-}
-export type statsRes = {
-  totalUsuarios: number,
-  totalReservas: number,
-  totalQuartos: number,
-  reservasAtivos: number,
-  reservasCanceladas: number,
-  tavaOcupacao: number
-}
+export type QuartoRes = {
+  id: number;
+  status: string;
+  descricao: string;
+  capacidade: number;
+  nome?: string;
+  name?: string;
+  valor: number;
+  tipo: string;
+  data_criacao: string;
+};
 
-export function adminService() {
-  const getAllQuartos = async (): Promise<quartoRes[]> => {
-    const token = localStorage.getItem(TOKEN_KEY)
-    const res = await adminApi.get<quartoRes[]>("/quarto",{
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
-    })
+export type BestRes = {
+  total: number;
+  quarto: QuartoRes;
+};
+
+type Authority = {
+  authority: string;
+};
+
+export type UsuarioRes = {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+  data_criado: string;
+  ativo: boolean;
+  authorities: Authority;
+};
+
+export type ReservaRes = {
+  id: number;
+  status: string;
+  quarto: QuartoRes;
+  usuario: UsuarioRes;
+  data_incio: string;
+  data_fim: string;
+  valorTotal: number;
+  data_criado: string;
+};
+
+export type ReceitaRes = {
+  ativa: number;
+  canceladas: number;
+};
+
+export type ReceitaPeriodoRes = {
+  dataInicio: string;
+  dataFim: string;
+  receitaAtivas: number;
+  receitaCanceladas: number;
+  receitaTotal: number;
+};
+
+export type QuartoStatsRes = {
+  disponiveis: number;
+  ocupados: number;
+};
+
+export type StatsRes = {
+  totalUsuarios: number;
+  totalReservas: number;
+  totalQuartos: number;
+  reservasAtivos: number;
+  reservasCanceladas: number;
+  tavaOcupacao: number;
+};
+
+const authHeaders = () => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+  },
+});
+
+export const adminService = {
+  async getAllQuartos(): Promise<QuartoRes[]> {
+    const res = await adminApi.get<QuartoRes[]>("/quarto", authHeaders());
     return res.data;
-  }
+  },
 
-}
+  async getRecentReservas(): Promise<ReservaRes[]> {
+    const res = await adminApi.get<ReservaRes[]>("/reserva", authHeaders());
+    return res.data;
+  },
+
+  async getBestQuartos(): Promise<BestRes[]> {
+    const res = await adminApi.get<BestRes[]>("/quarto/mais-reservados", authHeaders());
+    return res.data;
+  },
+
+  async getReceita(): Promise<ReceitaRes> {
+    const res = await adminApi.get<ReceitaRes>("/receita", authHeaders());
+    return res.data;
+  },
+
+  async getReceitaPeriodo(dataInicio: string, dataFim: string): Promise<ReceitaPeriodoRes> {
+    const res = await adminApi.get<ReceitaPeriodoRes>("/receita/periodo", {
+      ...authHeaders(),
+      params: { dataInicio, dataFim },
+    });
+    return res.data;
+  },
+
+  async getQuartoStats(): Promise<QuartoStatsRes> {
+    const res = await adminApi.get<QuartoStatsRes>("/quarto/stats", authHeaders());
+    return res.data;
+  },
+
+  async getStats(): Promise<StatsRes> {
+    const res = await adminApi.get<StatsRes>("/stats", authHeaders());
+    return res.data;
+  },
+};
