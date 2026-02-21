@@ -11,7 +11,7 @@ import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import {
   Box,
   CircularProgress,
-  Grid,
+  Grid
 } from "@mui/material";
 import { StatCard } from "./StatCard";
 

@@ -37,7 +37,5 @@ return (
 }
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
     <Root />
-  </StrictMode>
 );

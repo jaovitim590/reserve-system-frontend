@@ -164,7 +164,6 @@ export const QuartoReserva = () => {
 
       <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", md: "row" } }}>
 
-        {/* Coluna esquerda — info do quarto */}
         <Box sx={{ flex: 1 }}>
           <Card sx={{ borderRadius: 3, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
             <CardMedia sx={{ height: 240 }} image={quarto.image} title={quarto.nome} />
@@ -184,7 +183,6 @@ export const QuartoReserva = () => {
           </Card>
         </Box>
 
-        {/* Coluna direita — formulário */}
         <Box sx={{ flex: 1 }}>
           <Paper sx={{ borderRadius: 3, p: 3, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
@@ -273,7 +271,6 @@ export const QuartoReserva = () => {
                 </>
               )}
 
-              {/* Botão de reservar — bloqueado se OCUPADO e não verificou disponibilidade */}
               {podeReservar && (
                 <>
                   {errors.root && (

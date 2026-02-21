@@ -1,4 +1,4 @@
-import { adminApi } from "./api";
+import { api } from "./api";
 import { TOKEN_KEY } from "../lib/token";
 
 export type QuartoRes = {
@@ -38,7 +38,7 @@ export type ReservaRes = {
   status: string;
   quarto: QuartoRes;
   usuario: UsuarioRes;
-  data_incio: string;
+  data_inicio: string;
   data_fim: string;
   valorTotal: number;
   data_criado: string;
@@ -71,6 +71,16 @@ export type StatsRes = {
   tavaOcupacao: number;
 };
 
+type QuartoReq = {
+  id: number;
+  name: string;
+  descricao: string;
+  capacidade: number;
+  valor: number;
+  status: string;
+  tipo: string;
+}
+
 const authHeaders = () => ({
   headers: {
     Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
@@ -79,27 +89,27 @@ const authHeaders = () => ({
 
 export const adminService = {
   async getAllQuartos(): Promise<QuartoRes[]> {
-    const res = await adminApi.get<QuartoRes[]>("/quarto", authHeaders());
+    const res = await api.get<QuartoRes[]>("/admin/quarto", authHeaders());
     return res.data;
   },
 
   async getRecentReservas(): Promise<ReservaRes[]> {
-    const res = await adminApi.get<ReservaRes[]>("/reserva", authHeaders());
+    const res = await api.get<ReservaRes[]>("/admin/reserva", authHeaders());
     return res.data;
   },
 
   async getBestQuartos(): Promise<BestRes[]> {
-    const res = await adminApi.get<BestRes[]>("/quarto/best", authHeaders());
+    const res = await api.get<BestRes[]>("/admin/quarto/best", authHeaders());
     return res.data;
   },
 
   async getReceita(): Promise<ReceitaRes> {
-    const res = await adminApi.get<ReceitaRes>("/receita", authHeaders());
+    const res = await api.get<ReceitaRes>("/admin/receita", authHeaders());
     return res.data;
   },
 
   async getReceitaPeriodo(dataInicio: string, dataFim: string): Promise<ReceitaPeriodoRes> {
-    const res = await adminApi.get<ReceitaPeriodoRes>("/receita/periodo", {
+    const res = await api.get<ReceitaPeriodoRes>("/admin/receita/periodo", {
       ...authHeaders(),
       params: { dataInicio, dataFim },
     });
@@ -107,13 +117,33 @@ export const adminService = {
   },
 
   async getQuartoStats(): Promise<QuartoStatsRes> {
-    const res = await adminApi.get<QuartoStatsRes>("/quarto/status", authHeaders());
+    const res = await api.get<QuartoStatsRes>("/admin/quarto/status", authHeaders());
     return res.data;
   },
 
   async getStats(): Promise<StatsRes> {
-    const res = await adminApi.get<StatsRes>("/stats", authHeaders());
+    const res = await api.get<StatsRes>("/admin/stats", authHeaders());
     return res.data;
     
   },
+
+  async deleteReserva(id: number){
+    const res = await api.delete(`/admin/reserva/${id}`, authHeaders());
+    return res.data;
+  } ,
+
+  async deleteQuarto(id: number){
+    const res = await api.delete(`/admin/quarto/${id}`, authHeaders());
+    return res.data;
+  }, 
+
+  async createQuarto(data: QuartoReq): Promise<QuartoRes>{
+    const res = await api.post<QuartoRes>("/admin/quarto",data ,authHeaders());
+    return res.data;
+  },
+
+  async updateQuarto(data: QuartoReq): Promise<QuartoRes>{
+    const res = await api.put<QuartoRes>(`/admin/quarto/${data.id}`, data, authHeaders());
+    return res.data;
+  }
 };

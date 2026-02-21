@@ -1,4 +1,3 @@
-// src/pages/Home.tsx
 import {
   Box,
   Container,
@@ -75,7 +74,7 @@ export const Home = () => {
               textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
             }}
           >
-            Bem-vindo ao Hotelzinho do Jaovitim
+            Bem-vindo ao Hotel Jaovitim
           </Typography>
           <Typography
             variant="h5"

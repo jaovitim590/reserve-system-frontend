@@ -1,9 +1,4 @@
-import {
-  Box,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import {
   ArcElement,
   BarElement,
@@ -29,35 +24,37 @@ ChartJS.register(
   PointElement,
   Tooltip,
   Legend,
-  LineElement
+  LineElement,
 );
 
-
-
 export const DashBoard = () => {
-
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1400, mx: "auto" }}>
-      <Stack spacing={1} sx={{ mb: 3 }}>
-        <Typography variant="h4" fontWeight={700}>
-          Dashboard Administrativa
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Visão consolidada de reservas, ocupação e receita do sistema.
-        </Typography>
-      </Stack>
+      <Box sx={{ mb: 4 }}>
+        <Stack spacing={1}>
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            sx={{
+              background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Painel Administrativo
+          </Typography>
 
+          <Typography variant="body1" color="text.secondary">
+            Visão geral das reservas, usuáriose quartos do sistema.
+          </Typography>
+        </Stack>
+      </Box>
       <TopStats />
-
       <Grid container spacing={2.5}>
         <ReservaSituationChart />
-
         <OcupacaoChart />
-
         <BestRoomCard />
-
-        <ReservasRecentes/>
-        
+        <ReservasRecentes />
       </Grid>
     </Box>
   );

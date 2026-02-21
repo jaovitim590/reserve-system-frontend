@@ -1,4 +1,3 @@
-import { TOKEN_KEY } from "../lib/token";
 import { api } from "./api";
 import {ROLE} from "../lib/role"
 
@@ -52,18 +51,7 @@ async function signUp({name, email, password}: SignUpPayload) {
 
 
 async function getUser(): Promise<User> {
-  const token = localStorage.getItem(TOKEN_KEY)
-
-  if (!token) {
-    throw new Error("Token não encontrado");
-  }
-
-  const res = await api.get('/api/auth/me',{
-    headers:{
-      Authorization: `Bearer ${token}`
-    }
-  })
-  
+  const res = await api.get('/api/auth/me')
   return res.data;
 }
 

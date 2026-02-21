@@ -10,38 +10,50 @@ import {
 } from "@mui/material";
 import authService from "../services/authService";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
 import { type RegisterForm, registerSchema } from "../schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 export const Register = () => {
   const {
-      control,
-      handleSubmit,
-      setError,
-      formState: { isSubmitting, errors },
-    } = useForm<RegisterForm>({
-      resolver: zodResolver(registerSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-        password: "",
-        passwordConfirmation: "",
-      }
-    });
-  const navigate = useNavigate()
+    control,
+    handleSubmit,
+    setError,
+    formState: { isSubmitting, errors },
+  } = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
 
-   const onSubmit = async (data: RegisterForm) => {
-      try {
-        const { passwordConfirmation, ...payload } = data
-        await authService.signUp(payload)
-        navigate("/login")
-      } catch(e: any) {
-        setError("root", { message: "Erro ao criar conta. Tente novamente." })
-      }
+  const navigate = useNavigate();
+
+  // Observa os dois campos em tempo real
+  const password = useWatch({ control, name: "password" });
+  const passwordConfirmation = useWatch({ control, name: "passwordConfirmation" });
+
+  const passwordsMatch =
+    passwordConfirmation.length > 0 && password === passwordConfirmation;
+  const passwordsMismatch =
+    passwordConfirmation.length > 0 && password !== passwordConfirmation;
+
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      const { passwordConfirmation, ...payload } = data;
+      await authService.signUp(payload);
+      navigate("/login");
+    } catch (e: any) {
+      setError("root", { message: "Erro ao criar conta. Tente novamente." });
     }
+  };
 
   return (
     <Box
@@ -100,8 +112,28 @@ export const Register = () => {
             <FormInput type="password" name="password" control={control} label="Senha" autoComplete="new-password" />
             <FormInput type="password" name="passwordConfirmation" control={control} label="Confirmar senha" autoComplete="new-password" />
 
+            {passwordConfirmation.length > 0 && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.5 }}>
+                {passwordsMatch ? (
+                  <>
+                    <CheckCircleRoundedIcon sx={{ fontSize: 16, color: "success.main" }} />
+                    <Typography variant="caption" color="success.main" fontWeight={600}>
+                      Senhas coincidem
+                    </Typography>
+                  </>
+                ) : (
+                  <>
+                    <CancelRoundedIcon sx={{ fontSize: 16, color: "error.main" }} />
+                    <Typography variant="caption" color="error.main" fontWeight={600}>
+                      Senhas não coincidem
+                    </Typography>
+                  </>
+                )}
+              </Box>
+            )}
+
             {errors.root && (
-              <Alert severity="error" sx={{ borderRadius: 2 }}>
+              <Alert severity="error" sx={{ borderRadius: 2, mt: 1 }}>
                 {errors.root.message}
               </Alert>
             )}
@@ -111,9 +143,9 @@ export const Register = () => {
               variant="contained"
               size="large"
               fullWidth
-              disabled={isSubmitting}
+              disabled={isSubmitting || passwordsMismatch}
               sx={{
-                mt: 1,
+                mt: 1.5,
                 py: 1.5,
                 borderRadius: 2,
                 fontWeight: 700,
@@ -136,7 +168,7 @@ export const Register = () => {
             </Button>
 
             <Typography variant="body2" textAlign="center" sx={{ color: "text.secondary", mt: 1 }}>
-              Ja tem uma conta?{" "}
+              Já tem uma conta?{" "}
               <Box
                 component={Link}
                 to="/login"
@@ -149,6 +181,5 @@ export const Register = () => {
         </CardContent>
       </Card>
     </Box>
-  )
-}
-
+  );
+};

@@ -1,1 +1,1 @@
-export const TOKEN_KEY = 'RESERVE_SYSTEM:TOKEN'
+export const TOKEN_KEY = import.meta.env.TOKEN_KEY;

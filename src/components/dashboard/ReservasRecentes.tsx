@@ -90,7 +90,7 @@ return <Grid size={{ xs: 12, lg: 6 }}>
                         {reserva.quarto.nome ?? reserva.quarto.name}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {new Date(reserva.data_incio).toLocaleDateString(
+                        {new Date(reserva.data_inicio).toLocaleDateString(
                           "pt-BR",
                         )}{" "}
                         -{" "}

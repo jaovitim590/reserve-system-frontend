@@ -51,7 +51,7 @@ export const Header = () => {
                 fontSize: { xs: "1rem", sm: "1.25rem" },
               }}
             >
-              Hotelzinho do Jaovitim
+              Hotel Jaovitim
             </Typography>
           </Box>
 

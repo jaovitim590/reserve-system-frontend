@@ -9,7 +9,7 @@ import { QuartoReserva } from "./pages/Reservar";
 import { MinhasReservas } from "./pages/MyReservas";
 import { Contato } from "./pages/Contato";
 import { createBrowserRouter } from "react-router-dom";
-import { DashBoard } from "./components/Dashboard";
+import AdminLayout from "./components/AdminLayout";
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
           { path: "perfil", Component: Perfil },
           { path: "quartos/:id/reservar", Component: QuartoReserva },
           {path: "reservas", Component:MinhasReservas},
-          {path: "dashboard", Component:DashBoard}
+          {path: "dashboard", Component:AdminLayout}
         ]
       }
     ]

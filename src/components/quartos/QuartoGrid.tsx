@@ -159,6 +159,7 @@ export const QuartoGrid = () => {
                   tipo={quarto.tipo}
                   status={quarto.status}
                   image={quarto.image}
+                  valor={quarto.valor}
                 />
               </Grid>
             ))}

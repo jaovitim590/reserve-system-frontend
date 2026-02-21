@@ -12,25 +12,17 @@ import { type QuartoProps } from "../../services/quartoService";
 import { useNavigate } from "react-router-dom";
 
 export const QuartoCard = (props: QuartoProps) => {
+  const navigate = useNavigate();
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "DISPONIVEL":
-        return "success";
-      case "OCUPADO":
-        return "error";
-      default:
-        return "default";
+      case "DISPONIVEL": return "success";
+      case "OCUPADO":    return "error";
+      default:           return "default";
     }
   };
-  const navigate = useNavigate()
 
-  const handleClick = () => {
-    if (props.status === "DISPONIVEL") {
-      navigate(`/quartos/${props.id}/reservar`)
-    } else {
-      navigate(`/quartos/${props.id}/reservar`)
-    }
-  }
+  const handleClick = () => navigate(`/quartos/${props.id}/reservar`);
 
   return (
     <Card
@@ -42,34 +34,31 @@ export const QuartoCard = (props: QuartoProps) => {
         transition: "transform 0.2s ease, box-shadow 0.2s ease",
       }}
     >
-      <CardMedia
-        sx={{ height: 300 }}
-        image={props.image}
-        title={props.nome}
-      />
+      <CardMedia sx={{ height: 300 }} image={props.image} title={props.nome} />
 
       <CardContent sx={{ flexGrow: 1 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "start", mb: 1 }}>
-          <Chip
-            label={props.tipo}
-            color="primary"
-            size="small"
-            variant="outlined"
-          />
-          <Chip
-            label={props.status}
-            color={getStatusColor(props.status)}
-            size="small"
-          />
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.5 }}>
+          <Chip label={props.tipo} color="primary" size="small" variant="outlined" />
+          <Chip label={props.status} color={getStatusColor(props.status)} size="small" />
         </Box>
 
-        <Typography variant="h6" component="div" sx={{ fontWeight: 600, mb: 1 }}>
+        <Typography variant="h6" fontWeight={600} sx={{ mb: 0.5 }}>
           {props.nome}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
           {props.descricao}
         </Typography>
+
+        <Box sx={{
+          display: "flex", alignItems: "baseline", gap: 0.5,
+          mt: "auto", pt: 1, borderTop: "1px solid", borderColor: "divider",
+        }}>
+          <Typography variant="h6" fontWeight={700} color="primary">
+            {props.valor?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">/ noite</Typography>
+        </Box>
       </CardContent>
 
       <CardActions sx={{ p: 2, pt: 0 }}>

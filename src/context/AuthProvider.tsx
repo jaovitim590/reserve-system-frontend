@@ -7,19 +7,16 @@ import authService from "../services/authService";
 export function AuthProvider({ children }: React.PropsWithChildren) {
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY));
-  const [loading, setLoading] = useState(true);
+  // Se não há token, já inicia sem loading
+  const [loading, setLoading] = useState(() => !!localStorage.getItem(TOKEN_KEY));
 
-  const setAccessToken = (token: string) => {
-    localStorage.setItem(TOKEN_KEY, token);
-    setToken(token);
+  const setAccessToken = (newToken: string) => {
+    localStorage.setItem(TOKEN_KEY, newToken);
+    setToken(newToken);
   };
 
   useEffect(() => {
-
-    if (!token) {
-      setLoading(false)
-      return;}
-      
+    if (!token) return;
 
     authService.getUser()
       .then(setUser)
@@ -27,7 +24,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         setToken(null);
         localStorage.removeItem(TOKEN_KEY);
       })
-      .finally(()=> setLoading(false))
+      .finally(() => setLoading(false));
   }, [token]);
 
   const logout = () => {
@@ -37,9 +34,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, token,loading, setAccessToken, setUser, logout }}
-    >
+    <AuthContext.Provider value={{ user, token, loading, setAccessToken, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
