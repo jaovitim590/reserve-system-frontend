@@ -66,7 +66,7 @@ export type StatsRes = {
   totalUsuarios: number;
   totalReservas: number;
   totalQuartos: number;
-  reservasAtivos: number;
+  reservasAtivas: number;
   reservasCanceladas: number;
   tavaOcupacao: number;
 };
@@ -89,7 +89,7 @@ export const adminService = {
   },
 
   async getBestQuartos(): Promise<BestRes[]> {
-    const res = await adminApi.get<BestRes[]>("/quarto/mais-reservados", authHeaders());
+    const res = await adminApi.get<BestRes[]>("/quarto/best", authHeaders());
     return res.data;
   },
 
@@ -107,12 +107,13 @@ export const adminService = {
   },
 
   async getQuartoStats(): Promise<QuartoStatsRes> {
-    const res = await adminApi.get<QuartoStatsRes>("/quarto/stats", authHeaders());
+    const res = await adminApi.get<QuartoStatsRes>("/quarto/status", authHeaders());
     return res.data;
   },
 
   async getStats(): Promise<StatsRes> {
     const res = await adminApi.get<StatsRes>("/stats", authHeaders());
     return res.data;
+    
   },
 };
