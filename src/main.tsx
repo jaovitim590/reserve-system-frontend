@@ -9,7 +9,7 @@ import { getTheme } from "./theme/theme";
 import { ThemeContext } from "./theme/ThemeContext";
 import { AuthProvider } from "./context/AuthProvider";
 
-function Root() {
+export function Root() {
   const [mode, setMode] = useState<"light" | "dark">("light");
 
   const theme = useMemo(() => getTheme(mode), [mode]);
